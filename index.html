@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LiBe Math CAP</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+    }
+    .font-kids {
+      font-family: 'Fredoka One', cursive;
+    }
+    /* Cute bounce animation for bear */
+    @keyframes gentle-bounce {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1.02); }
+    }
+    .animate-bear {
+      animation: gentle-bounce 3s ease-in-out infinite;
+    }
+    /* Laughing animation for happy bear */
+    @keyframes laugh-shake {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      20% { transform: translateY(-10px) rotate(-3deg); }
+      40% { transform: translateY(2px) rotate(3deg); }
+      60% { transform: translateY(-8px) rotate(-2deg); }
+      80% { transform: translateY(1px) rotate(2deg); }
+    }
+    .animate-laugh {
+      animation: laugh-shake 0.6s ease-in-out infinite;
+    }
+    /* Pouting animation for sad bear */
+    @keyframes pout-shiver {
+      0%, 100% { transform: translateX(0) rotate(0deg); }
+      25% { transform: translateX(-4px) rotate(-1deg); }
+      75% { transform: translateX(4px) rotate(1deg); }
+    }
+    .animate-pout {
+      animation: pout-shiver 0.3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-pink-100 via-white to-pink-200 min-h-screen flex items-center justify-center p-4 overflow-x-hidden">
+
+  <!-- Main Game Container -->
+  <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl border-4 border-pink-300 overflow-hidden relative flex flex-col justify-between min-h-[620px]">
+    
+    <!-- Top Decorative Header Bar -->
+    <div class="bg-pink-400 h-4 w-full"></div>
+
+    <!-- APP VIEWS CONTAINER -->
+    <div class="p-6 flex-grow flex flex-col justify-between">
+      
+      <!-- ================= COVER VIEW ================= -->
+      <div id="view-cover" class="flex flex-col items-center justify-between flex-grow">
+        <div class="text-center mt-4">
+          <h1 class="text-4xl font-kids text-pink-500 drop-shadow-md tracking-wider">LiBe Math CAP</h1>
+          <p class="text-gray-500 font-bold mt-1 text-sm tracking-wide">Petualangan Matematika Seru!</p>
+        </div>
+
+        <!-- Dynamic Mascot Bear Holder -->
+        <div class="my-6 flex flex-col items-center justify-center animate-bear" id="cover-bear-container">
+          <!-- SVG White-Pink Bear holding Tablet -->
+          <svg id="mascot-bear-svg" width="200" height="200" viewBox="0 0 200 200" class="drop-shadow-lg">
+            <!-- Background glow -->
+            <circle cx="100" cy="110" r="75" fill="#FCE7F3" opacity="0.6"/>
+            
+            <!-- Bear Ears -->
+            <circle cx="55" cy="55" r="22" fill="#FFFFFF" stroke="#F9A8D4" stroke-width="4" />
+            <circle cx="55" cy="55" r="12" fill="#F472B6" />
+            <circle cx="145" cy="55" r="22" fill="#FFFFFF" stroke="#F9A8D4" stroke-width="4" />
+            <circle cx="145" cy="55" r="12" fill="#F472B6" />
+
+            <!-- Bear Body -->
+            <ellipse cx="100" cy="145" rx="55" ry="45" fill="#FFFFFF" stroke="#F9A8D4" stroke-width="4" />
+            <!-- Pink Belly -->
+            <ellipse cx="100" cy="148" rx="35" ry="25" fill="#FDF2F8" />
+
+            <!-- Bear Head -->
+            <circle cx="100" cy="100" r="50" fill="#FFFFFF" stroke="#F9A8D4" stroke-width="4" />
+            
+            <!-- Cheek Blush -->
+            <circle class="bear-blush" cx="68" cy="112" r="8" fill="#F472B6" opacity="0.6" />
+            <circle class="bear-blush" cx="132" cy="112" r="8" fill="#F472B6" opacity="0.6" />
+
+            <!-- Snout -->
+            <ellipse cx="100" cy="112" rx="14" ry="10" fill="#FDF2F8" stroke="#FBCFE8" stroke-width="2" />
+            <polygon points="95,108 105,108 100,113" fill="#DB2777" />
+
+            <!-- DYNAMIC EXPRESSIONS (EYES AND MOUTH) -->
+            <!-- Neutral State (Default) -->
+            <g id="face-normal">
+              <!-- Happy round eyes -->
+              <circle cx="78" cy="95" r="6" fill="#4B5563" />
+              <circle cx="122" cy="95" r="6" fill="#4B5563" />
+              <circle cx="76" cy="93" r="2" fill="#FFFFFF" />
+              <circle cx="120" cy="93" r="2" fill="#FFFFFF" />
+              <!-- Mouth curve -->
+              <path d="M96,116 Q100,121 104,116" fill="none" stroke="#DB2777" stroke-width="3" stroke-linecap="round" />
+            </g>
+
+            <!-- Correct/Laughing State (Hidden by default) -->
+            <g id="face-happy" class="hidden">
+              <!-- Closed happy eyes '^' '^' -->
+              <path d="M72,97 Q78,88 84,97" fill="none" stroke="#DB2777" stroke-width="4.5" stroke-linecap="round" />
+              <path d="M116,97 Q122,88 128,97" fill="none" stroke="#DB2777" stroke-width="4.5" stroke-linecap="round" />
+              <!-- Big laughing mouth -->
+              <path d="M94,115 Q100,128 106,115 Z" fill="#E11D48" stroke="#9F1239" stroke-width="1.5" />
+            </g>
+
+            <!-- Incorrect/Ngambek State (Hidden by default) -->
+            <g id="face-pout" class="hidden">
+              <!-- Annoyed / Sad slanted eyes -->
+              <path d="M72,92 L84,98" stroke="#4B5563" stroke-width="4" stroke-linecap="round" />
+              <path d="M128,92 L116,98" stroke="#4B5563" stroke-width="4" stroke-linecap="round" />
+              <circle cx="78" cy="100" r="4.5" fill="#4B5563" />
+              <circle cx="122" cy="100" r="4.5" fill="#4B5563" />
+              <!-- Downward sad mouth -->
+              <path d="M95,121 Q100,114 105,121" fill="none" stroke="#E11D48" stroke-width="3.5" stroke-linecap="round" />
+              <!-- Angry Brow indicator -->
+              <path d="M70,83 L82,88" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round" />
+              <path d="M130,83 L118,88" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round" />
+            </g>
+
+            <!-- Bear Hands holding Tablet -->
+            <!-- Left Hand -->
+            <circle cx="52" cy="140" r="11" fill="#FFFFFF" stroke="#F9A8D4" stroke-width="3" />
+            <!-- Right Hand -->
+            <circle cx="148" cy="140" r="11" fill="#FFFFFF" stroke="#F9A8D4" stroke-width="3" />
+
+            <!-- The Math Tablet -->
+            <g id="math-tablet">
+              <!-- Slate board -->
+              <rect x="62" y="125" width="76" height="42" rx="6" fill="#1E293B" stroke="#F472B6" stroke-width="3" />
+              <!-- Inner Screen with Math Text -->
+              <rect x="67" y="130" width="66" height="32" rx="3" fill="#0F172A" />
+              <!-- Written formula -->
+              <text x="100" y="150" font-family="'Fredoka One', cursive" font-size="12" fill="#34D399" text-anchor="middle" letter-spacing="1">
+                1 + 1 = 2
+              </text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Start Button -->
+        <div class="w-full px-4 mb-2">
+          <button onclick="changeView('menu')" class="w-full py-4 bg-pink-500 hover:bg-pink-600 active:scale-95 text-white font-kids text-xl rounded-2xl shadow-lg border-b-4 border-pink-700 transition duration-150 tracking-wider">
+            MULAI BERMAIN
+          </button>
+        </div>
+
+        <!-- Creator Signature at Bottom Right -->
+        <div class="w-full text-right text-xs text-pink-400 font-bold mt-2">
+          Pembuat: <span class="text-pink-600">Shonia Dimara</span>
+        </div>
+      </div>
+
+
+      <!-- ================= MENU VIEW (SELECT MODE & TRANSACTIONS) ================= -->
+      <div id="view-menu" class="hidden flex-col justify-between flex-grow">
+        <div>
+          <!-- Title & Back to Cover Button -->
+          <div class="flex items-center justify-between mb-4">
+            <button onclick="changeView('cover')" class="text-pink-500 hover:text-pink-600 font-bold flex items-center gap-1 transition">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+              </svg>
+              Cover
+            </button>
+            <h2 class="text-xl font-kids text-pink-500">Pilih Operasi</h2>
+            <div class="w-10"></div> <!-- spacing balancer -->
+          </div>
+
+          <p class="text-center text-sm text-gray-500 mb-4 font-bold">Pilih salah satu operasi matematika! Waktu bermain hanya 1 menit!</p>
+
+          <!-- Operation Buttons Grid -->
+          <div class="grid grid-cols-2 gap-3 mb-4">
+            <!-- Penjumlahan Button -->
+            <button onclick="startMode('penambahan')" class="bg-blue-50 hover:bg-blue-100 active:scale-95 p-3 rounded-2xl border-2 border-blue-200 hover:border-blue-400 flex flex-col items-center justify-center transition shadow-sm group">
+              <span class="text-2xl mb-1 group-hover:scale-110 transition duration-150">➕</span>
+              <span class="font-kids text-blue-600 text-xs">Penjumlahan</span>
+              <span class="text-[10px] text-blue-400 font-bold mt-0.5">20 Soal • 1 Mnt</span>
+            </button>
+
+            <!-- Pengurangan Button -->
+            <button onclick="startMode('pengurangan')" class="bg-orange-50 hover:bg-orange-100 active:scale-95 p-3 rounded-2xl border-2 border-orange-200 hover:border-orange-400 flex flex-col items-center justify-center transition shadow-sm group">
+              <span class="text-2xl mb-1 group-hover:scale-110 transition duration-150">➖</span>
+              <span class="font-kids text-orange-600 text-xs">Pengurangan</span>
+              <span class="text-[10px] text-orange-400 font-bold mt-0.5">20 Soal • 1 Mnt</span>
+            </button>
+
+            <!-- Perkalian Button -->
+            <button onclick="startMode('perkalian')" class="bg-purple-50 hover:bg-purple-100 active:scale-95 p-3 rounded-2xl border-2 border-purple-200 hover:border-purple-400 flex flex-col items-center justify-center transition shadow-sm group">
+              <span class="text-2xl mb-1 group-hover:scale-110 transition duration-150">✖️</span>
+              <span class="font-kids text-purple-600 text-xs">Perkalian</span>
+              <span class="text-[10px] text-purple-400 font-bold mt-0.5">20 Soal • 1 Mnt</span>
+            </button>
+
+            <!-- Pembagian Button -->
+            <button onclick="startMode('pembagian')" class="bg-emerald-50 hover:bg-emerald-100 active:scale-95 p-3 rounded-2xl border-2 border-emerald-200 hover:border-emerald-400 flex flex-col items-center justify-center transition shadow-sm group">
+              <span class="text-2xl mb-1 group-hover:scale-110 transition duration-150">➗</span>
+              <span class="font-kids text-emerald-600 text-xs">Pembagian</span>
+              <span class="text-[10px] text-emerald-400 font-bold mt-0.5">20 Soal • 1 Mnt</span>
+            </button>
+
+            <!-- Campuran Button -->
+            <button onclick="startMode('campuran')" class="col-span-2 bg-gradient-to-r from-pink-50 to-indigo-50 hover:from-pink-100 hover:to-indigo-100 active:scale-95 p-3 rounded-2xl border-2 border-pink-200 hover:border-pink-400 flex flex-col items-center justify-center transition shadow-sm group">
+              <span class="text-2xl mb-1 group-hover:scale-110 transition duration-150">🌀</span>
+              <span class="font-kids text-pink-600 text-xs">Pilihan Campuran</span>
+              <span class="text-[10px] text-pink-400 font-bold mt-0.5">Acak 20 Soal • 1 Mnt</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Transactions / Records Section -->
+        <div class="mt-2 border-t border-gray-100 pt-3">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-sm font-kids text-gray-700 flex items-center gap-1">
+              📝 Riwayat Belajar & Transaksi
+            </h3>
+            <button onclick="clearHistory()" class="text-xs text-red-400 hover:text-red-500 font-bold">
+              Hapus Semua
+            </button>
+          </div>
+          
+          <div class="max-h-32 overflow-y-auto border border-pink-100 rounded-xl bg-pink-50/40 p-2 text-xs" id="history-container">
+            <!-- Dynamically populated records go here -->
+            <p class="text-center text-gray-400 py-4">Belum ada riwayat permainan.</p>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ================= GAMEPLAY VIEW ================= -->
+      <div id="view-game" class="hidden flex-col justify-between flex-grow">
+        <!-- Game Header -->
+        <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+          <button onclick="confirmExit()" class="text-xs font-bold text-gray-400 hover:text-gray-600 flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-lg">
+            🚪 Keluar
+          </button>
+          <div class="text-center">
+            <span id="game-mode-title" class="font-kids text-xs text-pink-500 px-2 py-1 bg-pink-50 rounded-full border border-pink-100">
+              Operasi Matematika
+            </span>
+          </div>
+          <div class="flex flex-col items-end gap-1">
+            <div class="text-[10px] font-bold text-pink-500 bg-pink-100/50 px-2 py-0.5 rounded-full whitespace-nowrap">
+              Soal <span id="current-question-index">1</span>/20
+            </div>
+            <!-- Countdown Timer Badge -->
+            <div id="timer-badge" class="text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 flex items-center gap-1 whitespace-nowrap transition duration-300">
+              ⏱️ <span id="game-timer-display">60</span>s
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Reaction Bear Element -->
+        <div class="flex justify-center my-2" id="game-bear-wrapper">
+          <!-- Clone of the Bear SVG for dynamic expressions in game -->
+          <div id="game-bear-container" class="animate-bear">
+            <!-- Bear SVG will be dynamically injected here for clean state changes -->
+          </div>
+        </div>
+
+        <!-- Math Question Box -->
+        <div class="bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl p-6 text-center border border-pink-200 shadow-sm relative">
+          <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Berapa Hasil Dari:</p>
+          <div id="question-text" class="text-4xl font-kids text-gray-800 tracking-wider">
+            7 × 8 = ?
+          </div>
+        </div>
+
+        <!-- Answer Input & Control -->
+        <div class="my-4">
+          <form id="game-form" onsubmit="submitAnswer(event)" class="space-y-3">
+            <div class="relative">
+              <input type="number" id="answer-input" required placeholder="Masukkan jawabanmu..." 
+                class="w-full py-4 px-6 text-center text-2xl font-kids border-3 border-pink-200 rounded-2xl focus:outline-none focus:border-pink-500 bg-pink-50/30 text-gray-800 placeholder-gray-300 transition"
+                autocomplete="off">
+              <!-- Visual indicator inside input -->
+              <span id="feedback-icon" class="absolute right-4 top-1/2 -translate-y-1/2 text-2xl"></span>
+            </div>
+
+            <!-- Feedback Message -->
+            <div id="feedback-msg" class="text-center font-bold text-sm h-6 transition-all duration-150">
+              <!-- Dynamically populated: e.g. "Hebat! Jawabanmu Benar!" -->
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-5 gap-2">
+              <button type="submit" id="submit-btn" class="col-span-4 py-4 bg-pink-500 hover:bg-pink-600 active:scale-95 text-white font-kids text-lg rounded-xl shadow-md border-b-4 border-pink-700 transition duration-150">
+                Kirim Jawaban
+              </button>
+              <button type="button" id="next-btn" onclick="nextQuestion()" class="col-span-1 flex items-center justify-center bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white rounded-xl shadow-md border-b-4 border-emerald-700 disabled:opacity-50 transition" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Progress and Score Trackers -->
+        <div class="flex justify-around items-center bg-gray-50 p-3 rounded-xl border border-gray-100 text-xs font-bold text-gray-500">
+          <div class="flex items-center gap-1.5">
+            <span class="text-base">🟢</span> Benar: <span id="correct-count" class="text-emerald-500 text-sm">0</span>
+          </div>
+          <div class="h-4 w-px bg-gray-200"></div>
+          <div class="flex items-center gap-1.5">
+            <span class="text-base">🔴</span> Salah: <span id="incorrect-count" class="text-rose-500 text-sm">0</span>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ================= RESULT / SAVE VIEW ================= -->
+      <div id="view-result" class="hidden flex-col justify-between flex-grow text-center">
+        <div>
+          <h2 class="text-3xl font-kids text-pink-500 mb-2">Permainan Selesai!</h2>
+          <p id="result-status-text" class="text-gray-500 font-bold text-sm mb-6">Kerja bagus, kamu sudah menyelesaikan semua soal!</p>
+
+          <!-- Result Score Cards -->
+          <div class="bg-pink-50 border border-pink-100 rounded-2xl p-6 mb-6">
+            <p class="text-xs uppercase font-bold text-pink-400 tracking-wider">Akurasi Nilaimu</p>
+            <div id="result-score" class="text-6xl font-kids text-pink-500 my-2">100</div>
+            
+            <div class="grid grid-cols-2 gap-2 mt-4 text-xs font-bold text-gray-500">
+              <div class="bg-white p-2 rounded-lg border border-pink-100">
+                <span class="text-emerald-500 block text-lg" id="result-correct">20</span> Benar
+              </div>
+              <div class="bg-white p-2 rounded-lg border border-pink-100">
+                <span class="text-rose-500 block text-lg" id="result-incorrect">0</span> Salah
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Motivational Message -->
+          <p id="motivational-speech" class="font-bold text-gray-600 text-sm italic px-4 mb-6">
+            "Beruang putih-pink sangat bangga padamu hari ini!"
+          </p>
+        </div>
+
+        <!-- Save Transaction Action -->
+        <div class="space-y-3">
+          <button onclick="saveCurrentTransaction()" class="w-full py-4 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-kids text-lg rounded-2xl shadow-lg border-b-4 border-emerald-700 transition">
+            💾 Simpan Hasil Transaksi
+          </button>
+          <button onclick="changeView('menu')" class="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold rounded-2xl text-sm transition">
+            Kembali ke Menu Utama
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Wave Footer Decor -->
+    <div class="bg-pink-100 h-2 w-full"></div>
+  </div>
+
+  <!-- Exit Game Custom Modal Confirmation -->
+  <div id="exit-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center border-4 border-pink-300 shadow-2xl">
+      <h3 class="text-xl font-kids text-pink-500 mb-2">Keluar Game?</h3>
+      <p class="text-sm font-bold text-gray-500 mb-6">Kemajuan kamu pada sesi ini akan hilang jika keluar sekarang.</p>
+      <div class="flex gap-3 justify-center">
+        <button onclick="closeExitModal()" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold rounded-xl text-sm transition">
+          Batal
+        </button>
+        <button onclick="exitGameConfirm()" class="px-5 py-2.5 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl text-sm shadow-md border-b-2 border-rose-700 transition">
+          Ya, Keluar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Alert/Notifikasi Toast -->
+  <div id="toast" class="opacity-0 translate-y-4 pointer-events-none fixed bottom-4 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-lg transition duration-300 z-50">
+    Pesan Notifikasi
+  </div>
+
+  <script>
+    // ================= DATA SOAL SPESIFIK =================
+    const gameData = {
+      perkalian: [
+        { q: "7 × 8", a: 56 }, { q: "12 × 6", a: 72 }, { q: "9 × 9", a: 81 }, { q: "15 × 4", a: 60 },
+        { q: "13 × 7", a: 91 }, { q: "25 × 3", a: 75 }, { q: "18 × 5", a: 90 }, { q: "14 × 12", a: 168 },
+        { q: "11 × 11", a: 121 }, { q: "16 × 8", a: 128 }, { q: "21 × 4", a: 84 }, { q: "17 × 9", a: 153 },
+        { q: "19 × 6", a: 114 }, { q: "24 × 5", a: 120 }, { q: "32 × 2", a: 64 }, { q: "27 × 3", a: 81 },
+        { q: "35 × 4", a: 140 }, { q: "22 × 7", a: 154 }, { q: "40 × 5", a: 200 }, { q: "18 × 12", a: 216 }
+      ],
+      pembagian: [
+        { q: "56 ÷ 8", a: 7 }, { q: "72 ÷ 6", a: 12 }, { q: "81 ÷ 9", a: 9 }, { q: "64 ÷ 4", a: 16 },
+        { q: "91 ÷ 7", a: 13 }, { q: "75 ÷ 3", a: 25 }, { q: "90 ÷ 5", a: 18 }, { q: "144 ÷ 12", a: 12 },
+        { q: "121 ÷ 11", a: 11 }, { q: "128 ÷ 8", a: 16 }, { q: "84 ÷ 4", a: 21 }, { q: "153 ÷ 9", a: 17 },
+        { q: "114 ÷ 6", a: 19 }, { q: "120 ÷ 5", a: 24 }, { q: "64 ÷ 2", a: 32 }, { q: "81 ÷ 3", a: 27 },
+        { q: "140 ÷ 4", a: 35 }, { q: "154 ÷ 7", a: 22 }, { q: "200 ÷ 5", a: 40 }, { q: "216 ÷ 12", a: 18 }
+      ],
+      penambahan: [
+        { q: "45 + 32", a: 77 }, { q: "67 + 28", a: 95 }, { q: "89 + 14", a: 103 }, { q: "120 + 35", a: 155 },
+        { q: "56 + 78", a: 134 }, { q: "91 + 19", a: 110 }, { q: "150 + 75", a: 225 }, { q: "43 + 57", a: 100 },
+        { q: "88 + 12", a: 100 }, { q: "134 + 66", a: 200 }, { q: "29 + 71", a: 100 }, { q: "250 + 125", a: 375 },
+        { q: "73 + 48", a: 121 }, { q: "99 + 101", a: 200 }, { q: "145 + 55", a: 200 }, { q: "36 + 64", a: 100 },
+        { q: "210 + 90", a: 300 }, { q: "87 + 33", a: 120 }, { q: "158 + 42", a: 200 }, { q: "300 + 150", a: 450 }
+      ],
+      pengurangan: [
+        { q: "95 − 42", a: 53 }, { q: "120 − 35", a: 85 }, { q: "88 − 19", a: 69 }, { q: "150 − 75", a: 75 },
+        { q: "200 − 48", a: 152 }, { q: "91 − 27", a: 64 }, { q: "134 − 66", a: 68 }, { q: "100 − 45", a: 55 },
+        { q: "78 − 29", a: 49 }, { q: "165 − 85", a: 80 }, { q: "250 − 125", a: 125 }, { q: "99 − 33", a: 66 },
+        { q: "180 − 72", a: 108 }, { q: "145 − 55", a: 90 }, { q: "300 − 150", a: 150 }, { q: "87 − 49", a: 38 },
+        { q: "210 − 90", a: 120 }, { q: "158 − 42", a: 116 }, { q: "400 − 175", a: 225 }, { q: "500 − 250", a: 250 }
+      ]
+    };
+
+    // ================= STATE GAME =================
+    let currentMode = '';
+    let currentQuestions = [];
+    let currentQIndex = 0;
+    let correctCount = 0;
+    let incorrectCount = 0;
+    let answered = false;
+    let transactions = JSON.parse(localStorage.getItem('libemath_transactions') || '[]');
+
+    // ================= TIMER STATE =================
+    let gameTimer = null;
+    let timeLeft = 60;
+    let wasTimeout = false;
+
+    // ================= AUDIO SYNTHESIZER =================
+    // Synthesize simple sounds dynamically using Web Audio API
+    function playSound(type) {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+
+        if (type === 'correct') {
+          const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+          notes.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.08);
+            gain.gain.setValueAtTime(0.15, ctx.currentTime + idx * 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + idx * 0.08 + 0.3);
+            osc.start(ctx.currentTime + idx * 0.08);
+            osc.stop(ctx.currentTime + idx * 0.08 + 0.3);
+          });
+        } else if (type === 'incorrect') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.4);
+          gain.gain.setValueAtTime(0.12, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.4);
+        } else if (type === 'click') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(400, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.08);
+          gain.gain.setValueAtTime(0.1, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.08);
+        }
+      } catch (e) {
+        console.warn("Audio Context not allowed or failed to init: ", e);
+      }
+    }
+
+    // ================= INITIALIZATION =================
+    window.addEventListener('DOMContentLoaded', () => {
+      changeView('cover');
+      renderHistory();
+      
+      const bearTemplate = document.getElementById('mascot-bear-svg').outerHTML;
+      document.getElementById('game-bear-container').innerHTML = bearTemplate;
+    });
+
+    // ================= CORE NAVIGATION =================
+    function changeView(viewId) {
+      // Clean up timer if returning to cover or menu
+      if (viewId === 'cover' || viewId === 'menu') {
+        stopGameTimer();
+      }
+
+      ['cover', 'menu', 'game', 'result'].forEach(id => {
+        document.getElementById(`view-${id}`).classList.add('hidden');
+        document.getElementById(`view-${id}`).classList.remove('flex');
+      });
+
+      const target = document.getElementById(`view-${viewId}`);
+      target.classList.remove('hidden');
+      target.classList.add('flex');
+
+      if (viewId === 'menu') {
+        renderHistory();
+      }
+    }
+
+    // ================= MASCOT EXPRESSION CONTROLLER =================
+    function setMascotExpression(state) {
+      const containers = ['game-bear-container', 'cover-bear-container'];
+      
+      containers.forEach(containerId => {
+        const root = document.getElementById(containerId);
+        if (!root) return;
+
+        const faceNormal = root.querySelector('#face-normal');
+        const faceHappy = root.querySelector('#face-happy');
+        const facePout = root.querySelector('#face-pout');
+
+        if (!faceNormal || !faceHappy || !facePout) return;
+
+        faceNormal.classList.add('hidden');
+        faceHappy.classList.add('hidden');
+        facePout.classList.add('hidden');
+
+        root.classList.remove('animate-laugh', 'animate-pout', 'animate-bear');
+
+        if (state === 'correct') {
+          faceHappy.classList.remove('hidden');
+          root.classList.add('animate-laugh');
+        } else if (state === 'incorrect') {
+          facePout.classList.remove('hidden');
+          root.classList.add('animate-pout');
+        } else {
+          faceNormal.classList.remove('hidden');
+          root.classList.add('animate-bear');
+        }
+      });
+    }
+
+    // ================= TIMER LOGIC =================
+    function startGameTimer() {
+      stopGameTimer();
+      timeLeft = 60;
+      wasTimeout = false;
+      updateTimerUI();
+
+      gameTimer = setInterval(() => {
+        timeLeft--;
+        updateTimerUI();
+
+        if (timeLeft <= 0) {
+          stopGameTimer();
+          wasTimeout = true;
+          playSound('incorrect');
+          showToast("⏰ Waktu habis! Permainan selesai.");
+          finishGame();
+        }
+      }, 1000);
+    }
+
+    function stopGameTimer() {
+      if (gameTimer) {
+        clearInterval(gameTimer);
+        gameTimer = null;
+      }
+      const timerBadge = document.getElementById('timer-badge');
+      if (timerBadge) {
+        timerBadge.classList.remove('bg-rose-100', 'text-rose-600', 'border-rose-300', 'scale-105', 'animate-pulse');
+        timerBadge.classList.add('bg-amber-50', 'text-amber-600', 'border-amber-200');
+      }
+    }
+
+    function updateTimerUI() {
+      const display = document.getElementById('game-timer-display');
+      const timerBadge = document.getElementById('timer-badge');
+      if (!display || !timerBadge) return;
+
+      display.innerText = timeLeft;
+
+      // Visual warning when time is low (under 15 seconds)
+      if (timeLeft <= 15) {
+        timerBadge.classList.remove('bg-amber-50', 'text-amber-600', 'border-amber-200');
+        timerBadge.classList.add('bg-rose-100', 'text-rose-600', 'border-rose-300', 'scale-105', 'animate-pulse');
+      } else {
+        timerBadge.classList.remove('bg-rose-100', 'text-rose-600', 'border-rose-300', 'scale-105', 'animate-pulse');
+        timerBadge.classList.add('bg-amber-50', 'text-amber-600', 'border-amber-200');
+      }
+    }
+
+    // ================= GAMEPLAY ACTIONS =================
+    function startMode(mode) {
+      playSound('click');
+      currentMode = mode;
+      
+      if (mode === 'campuran') {
+        // Generate mixed questions: 5 random from each of the 4 categories to make exactly 20 questions
+        const getFiveRandom = (arr) => {
+          return [...arr].sort(() => Math.random() - 0.5).slice(0, 5);
+        };
+        const p1 = getFiveRandom(gameData.penambahan);
+        const p2 = getFiveRandom(gameData.pengurangan);
+        const p3 = getFiveRandom(gameData.perkalian);
+        const p4 = getFiveRandom(gameData.pembagian);
+        
+        // Combine and shuffle the mixed set
+        currentQuestions = [...p1, ...p2, ...p3, ...p4].sort(() => Math.random() - 0.5);
+      } else {
+        currentQuestions = [...gameData[mode]];
+      }
+      
+      currentQIndex = 0;
+      correctCount = 0;
+      incorrectCount = 0;
+      answered = false;
+
+      // Update Header Text UI
+      const formatModeName = (m) => {
+        if (m === 'penambahan') return 'Penjumlahan ➕';
+        if (m === 'pengurangan') return 'Pengurangan ➖';
+        if (m === 'perkalian') return 'Perkalian ✖️';
+        if (m === 'pembagian') return 'Pembagian ➗';
+        if (m === 'campuran') return 'Campuran 🌀';
+        return m;
+      };
+      document.getElementById('game-mode-title').innerText = formatModeName(mode);
+
+      changeView('game');
+      setMascotExpression('neutral');
+      loadQuestion();
+      startGameTimer(); // Start the 1 minute timer
+    }
+
+    function loadQuestion() {
+      answered = false;
+      const qData = currentQuestions[currentQIndex];
+      
+      document.getElementById('current-question-index').innerText = currentQIndex + 1;
+      document.getElementById('correct-count').innerText = correctCount;
+      document.getElementById('incorrect-count').innerText = incorrectCount;
+
+      document.getElementById('question-text').innerText = `${qData.q} = ?`;
+
+      const input = document.getElementById('answer-input');
+      input.value = '';
+      input.disabled = false;
+      input.focus();
+
+      document.getElementById('feedback-msg').innerText = '';
+      document.getElementById('feedback-icon').innerText = '';
+      
+      setMascotExpression('neutral');
+
+      document.getElementById('submit-btn').disabled = false;
+      document.getElementById('submit-btn').classList.remove('opacity-50');
+      document.getElementById('next-btn').disabled = true;
+    }
+
+    function submitAnswer(e) {
+      e.preventDefault();
+      if (answered) return;
+
+      const input = document.getElementById('answer-input');
+      const userAnswer = parseInt(input.value.trim());
+      if (isNaN(userAnswer)) return;
+
+      answered = true;
+      input.disabled = true;
+
+      const qData = currentQuestions[currentQIndex];
+      const isCorrect = (userAnswer === qData.a);
+
+      const msgEl = document.getElementById('feedback-msg');
+      const iconEl = document.getElementById('feedback-icon');
+
+      if (isCorrect) {
+        correctCount++;
+        playSound('correct');
+        setMascotExpression('correct');
+        
+        msgEl.innerText = "Yeeeey! Jawabanmu BENAR! 🥳";
+        msgEl.className = "text-center font-bold text-sm text-emerald-500 h-6 transition-all scale-105 duration-150";
+        iconEl.innerText = "✅";
+        iconEl.className = "absolute right-4 top-1/2 -translate-y-1/2 text-2xl text-emerald-500";
+      } else {
+        incorrectCount++;
+        playSound('incorrect');
+        setMascotExpression('incorrect');
+
+        msgEl.innerText = `Opps, Salah! Beruang ngambek.. Jawabannya adalah: ${qData.a}`;
+        msgEl.className = "text-center font-bold text-sm text-rose-500 h-6 transition-all duration-150";
+        iconEl.innerText = "❌";
+        iconEl.className = "absolute right-4 top-1/2 -translate-y-1/2 text-2xl text-rose-500 animate-bounce";
+      }
+
+      document.getElementById('submit-btn').disabled = true;
+      document.getElementById('submit-btn').classList.add('opacity-50');
+      document.getElementById('next-btn').disabled = false;
+    }
+
+    function nextQuestion() {
+      playSound('click');
+      currentQIndex++;
+      if (currentQIndex < currentQuestions.length) {
+        loadQuestion();
+      } else {
+        stopGameTimer();
+        finishGame();
+      }
+    }
+
+    function finishGame() {
+      stopGameTimer();
+      
+      // Calculate performance based on answered questions
+      const totalQuestions = currentQuestions.length;
+      const finalPercentage = Math.round((correctCount / totalQuestions) * 100);
+      
+      document.getElementById('result-score').innerText = finalPercentage;
+      document.getElementById('result-correct').innerText = correctCount;
+      document.getElementById('result-incorrect').innerText = incorrectCount;
+
+      const resultStatusText = document.getElementById('result-status-text');
+      if (wasTimeout) {
+        resultStatusText.innerText = "Waktu 1 menit sudah habis! Tetap hebat!";
+      } else {
+        resultStatusText.innerText = "Kerja bagus, kamu sudah menyelesaikan semua soal!";
+      }
+
+      const speechEl = document.getElementById('motivational-speech');
+      if (finalPercentage === 100) {
+        speechEl.innerText = `"Luar biasa sempurna! Beruang putih-pink sangat gembira dan bangga padamu! 🌟"`;
+      } else if (finalPercentage >= 75) {
+        speechEl.innerText = `"Hebat sekali! Beruang memberimu jempol manis atas belajarmu hari ini! 👍"`;
+      } else if (finalPercentage >= 50) {
+        speechEl.innerText = `"Bagus! Beruang mengajakmu berlatih sedikit lagi agar bisa raih nilai sempurna!"`;
+      } else {
+        speechEl.innerText = `"Jangan menyerah! Beruang akan selalu menemanimu belajar agar kamu makin jago matematika! 💖"`;
+      }
+
+      changeView('result');
+    }
+
+    // ================= TRANSACTION / HISTORY HANDLERS =================
+    function saveCurrentTransaction() {
+      const today = new Date();
+      const formattedDate = today.toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      const modeLabel = {
+        'penambahan': 'Penjumlahan',
+        'pengurangan': 'Pengurangan',
+        'perkalian': 'Perkalian',
+        'pembagian': 'Pembagian',
+        'campuran': 'Campuran'
+      }[currentMode] || currentMode;
+
+      const transaction = {
+        id: 'tx-' + Date.now(),
+        date: formattedDate,
+        mode: modeLabel,
+        correct: correctCount,
+        incorrect: incorrectCount,
+        score: Math.round((correctCount / currentQuestions.length) * 100)
+      };
+
+      transactions.unshift(transaction);
+      localStorage.setItem('libemath_transactions', JSON.stringify(transactions));
+
+      showToast("✅ Berhasil menyimpan riwayat belajar!");
+      changeView('menu');
+    }
+
+    function renderHistory() {
+      const container = document.getElementById('history-container');
+      if (transactions.length === 0) {
+        container.innerHTML = `<p class="text-center text-gray-400 py-4">Belum ada riwayat transaksi pengerjaan.</p>`;
+        return;
+      }
+
+      let html = '<div class="space-y-2">';
+      transactions.forEach(tx => {
+        let scoreColor = tx.score >= 80 ? 'text-emerald-600 bg-emerald-50' : (tx.score >= 50 ? 'text-blue-600 bg-blue-50' : 'text-rose-600 bg-rose-50');
+        html += `
+          <div class="bg-white p-2.5 rounded-lg border border-pink-100 flex items-center justify-between gap-2 shadow-sm">
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="font-kids text-gray-700">${tx.mode}</span>
+                <span class="text-[10px] text-gray-400">${tx.date}</span>
+              </div>
+              <div class="text-[10px] text-gray-500 font-bold mt-0.5">
+                Benar: <span class="text-emerald-500">${tx.correct}</span> | Salah: <span class="text-rose-500">${tx.incorrect}</span>
+              </div>
+            </div>
+            <div class="px-2.5 py-1 rounded-lg font-kids text-sm ${scoreColor} border border-current/10">
+              ${tx.score}
+            </div>
+          </div>
+        `;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    function clearHistory() {
+      if (confirm('Apakah kamu yakin ingin menghapus semua riwayat transaksi permainan?')) {
+        transactions = [];
+        localStorage.removeItem('libemath_transactions');
+        renderHistory();
+        showToast("🧹 Riwayat berhasil dibersihkan!");
+      }
+    }
+
+    // ================= CUSTOM DIALOGS & UTILS =================
+    function confirmExit() {
+      playSound('click');
+      document.getElementById('exit-modal').classList.remove('hidden');
+    }
+
+    function closeExitModal() {
+      document.getElementById('exit-modal').classList.add('hidden');
+    }
+
+    function exitGameConfirm() {
+      closeExitModal();
+      stopGameTimer();
+      changeView('menu');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.innerText = message;
+      toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
